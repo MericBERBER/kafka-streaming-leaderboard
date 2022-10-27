@@ -18,7 +18,7 @@ public class App {
 
         String endpoint = String.format("%s:%d", LeaderboardConstants.APPLICATION_SERVER_HOST, LeaderboardConstants.APPLICATION_SERVER_PORT);
 
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "deev1g23");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "leaderboard-streaming-app");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
         props.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
         props.put(StreamsConfig.APPLICATION_SERVER_CONFIG, endpoint);
