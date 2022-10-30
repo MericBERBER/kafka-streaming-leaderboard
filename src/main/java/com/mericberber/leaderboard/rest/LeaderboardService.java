@@ -1,5 +1,6 @@
 package com.mericberber.leaderboard.rest;
 
+import com.mericberber.leaderboard.constants.LeaderboardConstants;
 import com.mericberber.leaderboard.model.HighScores;
 import com.mericberber.leaderboard.model.join.Enriched;
 import io.javalin.Javalin;
@@ -32,7 +33,7 @@ public class LeaderboardService {
 
     private static final Logger log = LoggerFactory.getLogger(LeaderboardService.class);
 
-    LeaderboardService(HostInfo hostInfo, KafkaStreams streams) {
+    public LeaderboardService(HostInfo hostInfo, KafkaStreams streams) {
         this.hostInfo = hostInfo;
         this.streams = streams;
     }
@@ -41,12 +42,12 @@ public class LeaderboardService {
         return streams.store(
                 StoreQueryParameters.fromNameAndType(
                         // state store name
-                        "leader-boards",
+                        LeaderboardConstants.LEADERBOARD_STATE_STORE,
                         // state store type
                         QueryableStoreTypes.keyValueStore()));
     }
 
-    void start() {
+    public void start() {
         Javalin app = Javalin.create().start(hostInfo.port());
 
         /** Local key-value store query: all entries */
@@ -103,7 +104,7 @@ public class LeaderboardService {
     void getCount(Context ctx) {
         long count = getStore().approximateNumEntries();
 
-        for (StreamsMetadata metadata : streams.allMetadataForStore("leader-boards")) {
+        for (StreamsMetadata metadata : streams.allMetadataForStore(LeaderboardConstants.LEADERBOARD_STATE_STORE)) {
             if (!hostInfo.equals(metadata.hostInfo())) {
                 continue;
             }
@@ -144,7 +145,7 @@ public class LeaderboardService {
 
         // find out which host has the key
         KeyQueryMetadata metadata =
-                streams.queryMetadataForKey("leader-boards", productId, Serdes.String().serializer());
+                streams.queryMetadataForKey(LeaderboardConstants.LEADERBOARD_STATE_STORE, productId, Serdes.String().serializer());
 
         // the local instance has this key
         if (hostInfo.equals(metadata.activeHost())) {

@@ -1,10 +1,12 @@
 package com.mericberber.leaderboard;
 
 import com.mericberber.leaderboard.constants.LeaderboardConstants;
+import com.mericberber.leaderboard.rest.LeaderboardService;
 import com.mericberber.leaderboard.streams.LeaderboardStreamingTopology;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
+import org.apache.kafka.streams.state.HostInfo;
 
 import java.util.Properties;
 
@@ -29,5 +31,10 @@ public class App {
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
         // start streaming!
         streams.start();
+
+        // start the REST service
+        HostInfo hostInfo = new HostInfo(LeaderboardConstants.APPLICATION_SERVER_HOST, LeaderboardConstants.APPLICATION_SERVER_PORT);
+        LeaderboardService service = new LeaderboardService(hostInfo, streams);
+        service.start();
     }
 }
