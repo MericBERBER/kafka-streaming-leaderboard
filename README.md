@@ -60,3 +60,4 @@ Topologies:
     Sink: KSTREAM-SINK-0000000020 (topic: high-scores)
       <-- KTABLE-TOSTREAM-0000000019
 
+![image](https://user-images.githubusercontent.com/20739328/199293578-aaf5f98b-937d-446a-a573-d54fcab44212.png)
